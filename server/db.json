@@ -1,0 +1,46 @@
+{
+  "employee": [
+    {
+      "name": "test",
+      "department": [
+        "HR"
+      ],
+      "gender": "male",
+      "salary": "300000",
+      "startDate": "5 Jan 2020",
+      "id": 31289458784589,
+      "profileUrl": "./assets/profile-images/Ellipse 1.png"
+    },
+    {
+      "name": "Milkha",
+      "department": [
+        "Engineer"
+      ],
+      "gender": "male",
+      "salary": "500000",
+      "startDate": "6 Jan 2019",
+      "id": 546548543958345,
+      "profileUrl": "./assets/profile-images/Ellipse -1.png"
+    },
+    {
+      "name": "Bunty",
+      "department": [
+        "Sales"
+      ],
+      "gender": "male",
+      "salary": "600000",
+      "startDate": "20 Jan 2019",
+      "id": 984768375845998,
+      "profileUrl": "./assets/profile-images/Ellipse -2.png"
+    },
+    {
+      "name": "MD ADNAN KHAN",
+      "gender": "male",
+      "salary": "368642",
+      "startDate": "1 Jan 2020",
+      "notes": "",
+      "id": 984768375845999,
+      "profileUrl": "../../assets/profile-images/Ellipse -3.png"
+    }
+  ]
+}
