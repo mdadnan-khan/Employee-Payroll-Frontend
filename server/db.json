@@ -41,6 +41,15 @@
       "notes": "",
       "id": 984768375845999,
       "profileUrl": "../../assets/profile-images/Ellipse -3.png"
+    },
+    {
+      "name": "Adnan",
+      "gender": "male",
+      "salary": "331264",
+      "startDate": "1 Jan 2020",
+      "notes": "",
+      "id": 984768375846000,
+      "profileUrl": "../../assets/profile-images/Ellipse -8.png"
     }
   ]
 }
