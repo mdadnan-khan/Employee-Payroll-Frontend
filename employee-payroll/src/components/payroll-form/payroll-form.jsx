@@ -20,7 +20,7 @@ const PayrollForm = (props) => {
     allDepartment: [
       'HR', 'Sales', 'Finance', 'Engineer', 'Others'
     ],
-    departmenValue: [],
+    departmentValue: [],
     gender: '',
     salary: '',
     day: '1',
@@ -29,36 +29,40 @@ const PayrollForm = (props) => {
     startDate: '',
     notes: '',
     id: '',
-    profileUrl: '',
+    profilePic: '',
     isUpdate: false,
     error: {
       department: '',
       name: '',
       gender: '',
       salary: '',
-      profileUrl: '',
+      profilePic: '',
       startDate: ''
     }
   }
   const [formValue, setForm] = useState(initialValue);
   let employeeService = new EmployeeService();
+  const params = useParams();
+
 
   const changeValue = (event) => {
     setForm({ ...formValue, [event.target.name]: event.target.value });
-  }
+    console.log(event.target.value);
+  };
+
 
   const onCheckChange = (name) => {
-    let index = formValue.departmenValue.indexOf(name);
-    let checkArray = [...formValue.departmenValue];
+    let index = formValue.departmentValue.indexOf(name);
+    let checkArray = [...formValue.departmentValue];
     if (index > -1)
       checkArray.splice(index, 1);
     else
       checkArray.push(name);
-    setForm({ ...formValue, departmenValue: checkArray });
+    setForm({ ...formValue, departmentValue: checkArray });
   }
 
   const getChecked = (name) => {
-    return formValue.departmenValue && formValue.departmenValue.includes(name);
+    return formValue.departmentValue && formValue.departmentValue.includes(name);
   }
 
   const validData = async () => {
@@ -68,7 +72,7 @@ const PayrollForm = (props) => {
       name: '',
       gender: '',
       salary: '',
-      profileUrl: '',
+      profilePic: '',
       startDate: ''
     }
     if (formValue.name.length < 1) {
@@ -83,20 +87,27 @@ const PayrollForm = (props) => {
       error.salary = 'salary is required field'
       isError = true;
     }
-    if (formValue.profileUrl.length < 1) {
-      error.profileUrl = 'profileUrl is required field'
+    if (formValue.profilePic.length < 1) {
+      error.profilePic = 'profilePic is required field'
       isError = true;
     }
     if (formValue.departmentValue.length < 1) {
-      error.departmentValue = 'departmentValue is required field'
+      error.department = 'departmentValue is required field'
       isError = true;
     }
-    await setForm({ ...formValue, error: error })
+    setForm({ ...formValue, error: error })
     return isError;
   }
 
   const save = async (event) => {
+    console.log(formValue);
     event.preventDefault();
+    console.log("save");
+    if (await validData()) {
+      console.log("error", formValue);
+      return;
+    }
+
     let object = {
       name: formValue.name,
       department: formValue.departmentValue,
@@ -104,16 +115,16 @@ const PayrollForm = (props) => {
       salary: formValue.salary,
       startDate: `${formValue.day} ${formValue.month} ${formValue.year}`,
       notes: formValue.notes,
-      id: formValue.id,
-      profileUrl: formValue.profileUrl
+      id: '',
+      profilePic: formValue.profilePic
     }
-    console.log(object);
+
     employeeService.addEmployee(object).then(data => {
       console.log("data added");
-      props.history.push('');
+      props.history.push('/home');
     }).catch(err => {
       console.log("err while add");
-    })
+    });
   }
 
   const reset = () => {
@@ -141,31 +152,31 @@ const PayrollForm = (props) => {
           </div>
           <div className="error">{formValue.error.name}</div>
           <div className="row">
-            <label htmlFor="profileUrl" className="label text">Profile image</label>
+            <label htmlFor="profilePic" className="label text">Profile image</label>
             <div className="profile-radio-button">
               <label>
-                <input type="radio" checked={formValue.profileUrl == '../../assets/profile-images/Ellipse -3.png'}
-                  name='profileUrl' value="../../assets/profile-images/Ellipse -3.png" onChange={changeValue} />
+                <input type="radio" checked={formValue.profilePic == '../../assets/profile-images/Ellipse -3.png'}
+                  name='profilePic' value="../../assets/profile-images/Ellipse -3.png" onChange={changeValue} />
                 <img src={profile1} className="profile" />
               </label>
               <label>
-                <input type="radio" checked={formValue.profileUrl == '../../assets/profile-images/Ellipse 1.png'}
-                  name='profileUrl' value="../../assets/profile-images/Ellipse 1.png" onChange={changeValue} />
+                <input type="radio" checked={formValue.profilePic == '../../assets/profile-images/Ellipse 1.png'}
+                  name='profilePic' value="../../assets/profile-images/Ellipse 1.png" onChange={changeValue} />
                 <img src={profile2} className="profile" />
               </label>
               <label>
-                <input type="radio" checked={formValue.profileUrl == '../../assets/profile-images/Ellipse -8.png'}
-                  name='profileUrl' value="../../assets/profile-images/Ellipse -8.png" onChange={changeValue} />
+                <input type="radio" checked={formValue.profilePic == '../../assets/profile-images/Ellipse -8.png'}
+                  name='profilePic' value="../../assets/profile-images/Ellipse -8.png" onChange={changeValue} />
                 <img src={profile3} className="profile" />
               </label>
               <label>
-                <input type="radio" checked={formValue.profileUrl == '../../assets/profile-images/Ellipse -7.png'}
-                  name='profileUrl' value="../../assets/profile-images/Ellipse -7.png" onChange={changeValue} />
+                <input type="radio" checked={formValue.profilePic == '../../assets/profile-images/Ellipse -7.png'}
+                  name='profilePic' value="../../assets/profile-images/Ellipse -7.png" onChange={changeValue} />
                 <img src={profile4} className="profile" />
               </label>
             </div>
           </div>
-          <div className="error">{formValue.error.profileUrl}</div>
+          <div className="error">{formValue.error.profilePic}</div>
           <div className="row">
             <label htmlFor="gender" className="label text">Gender</label>
             <div>
@@ -181,17 +192,9 @@ const PayrollForm = (props) => {
             <div>
               {formValue.allDepartment.map(item => (
                 <span key={item}>
-                  <input
-                    className="checkbox"
-                    type="checkbox"
-                    onChange={() => onCheckChange(item)}
-                    name={item}
-                    defaultChecked={() => getChecked(item)}
-                    value={item}
-                  />
-                  <label className="text" htmlFor={item}>
-                    {item}
-                  </label>
+                  <input type="checkbox" className="checkbox" onChange={() => onCheckChange(item)} name={item}
+                    defaultChecked={() => getChecked(item)} value={item} />
+                  <label htmlFor={item} className="text" >{item}</label>
                 </span>
               ))}
             </div>
@@ -269,7 +272,7 @@ const PayrollForm = (props) => {
               value={formValue.notes} placeholder="" style={{ height: '100%' }}></textarea>
           </div>
           <div className="buttonParent">
-            <Link to="/#" className="resetButton button cancelButton">Cancel</Link>
+            <Link to="/home" className="resetButton button cancelButton">Cancel</Link>
             <div className="submit-reset">
               <button type="submit" className="button submitButton" id="submitButton">{formValue.isUpdate ? 'Update' : 'Submit'}</button>
               <button type="button" onClick={reset} className="resetButton button">Reset</button>

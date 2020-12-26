@@ -1,20 +1,24 @@
 import React from "react";
-import Display from "./display/display";
-import EmployeeService from "../../services/employee-service";
-import addUser from "../../assets/icons/add-24px.svg"
+import searchIcon from "../../assets/icons/search.png"
+import addIcon from "../../assets/icons/add-24px.svg"
+import "./payroll-home.css";
+import EmployeeService from "../../services/employee-service"
+import Display from "./display/display"
+import logo from "../../assets/images/logo.png"
 import { Link } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
-
-class PayrollHome extends React.Component {
+export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchExpand: false,
       employeeArray: [],
+      AllEmployeeArray: [],
     };
     this.employeeService = new EmployeeService();
   }
-
+  openSearch = () => {
+    this.setState({ searchExpand: true });
+  };
   componentDidMount() {
     this.getAllEmployee();
   }
@@ -22,46 +26,78 @@ class PayrollHome extends React.Component {
   getAllEmployee = () => {
     this.employeeService
       .getAllEmployees()
-      .then(data => {
+      .then((data) => {
         console.log("data after get ", data.data);
         this.setState({
-          employeeArray: data.data,
+          employeeArray: data.data.data,
+          AllEmployeeArray: data.data.data,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("err after ", err);
       });
+  };
+  search = async (event) => {
+    let search = event.target.value;
+
+    await this.setState({ employeeArray: this.state.AllEmployeeArray });
+    let empArray = this.state.employeeArray;
+    if (search.trim().length > 0)
+      empArray = empArray.filter(
+        (element) =>
+          element.name.toLowerCase().indexOf(search.toLowerCase()) > -1
+      );
+
+    this.setState({ employeeArray: empArray });
   };
 
   render() {
     return (
-      <div className="home">
-        <header className="header-content header">
+      <div>
+        <header className='header-content header'>
           <div className="logo-content">
-            <img src={logo} />
+            <img src={logo} alt="" />
             <div>
               <span className="emp-text">EMPLOYEE</span> <br />
               <span className="emp-text emp-payroll">PAYROLL</span>
             </div>
           </div>
         </header>
-        <div className="main-content">
-          <div className="header-content">
-            <div className="emp-details-text">
-              Employee Details <div class="emp-count"> 10</div>
+        <div className="column content">
+          <div className="emp-detail">
+            <div className="detail-text">
+              Employee Details <div className="count"></div>
             </div>
-            <Link to="form" className="add-button">
-              <img src={addUser} alt="" /> Add User
-            </Link>
-          </div>
+            <div className="search-box" onClick={this.openSearch}>
+              <input
+                className={
+                  "input " + (this.state.searchExpand && "input-expand")
+                }
+                onChange={this.search}
+                type="text"
+                placeholder=""
+              />
+              <img className="search-icon" src={searchIcon} alt="" />
+            </div>
+            <div className="row center button-box">
 
+              <div>
+                <a href="/payroll-form" className="add-button flex-row-center">
+                  < img src={addIcon} alt="Add User" /> Add User</a>
+
+              </div>
+
+
+            </div>
+          </div>
           <div className="table-main">
-            <Display employeeArray={this.state.employeeArray} />
+            <Display
+              employeeArray={this.state.employeeArray}
+              getAllEmployee={this.getAllEmployee}
+            />
           </div>
         </div>
       </div>
     );
   }
 }
-
-export default PayrollHome;

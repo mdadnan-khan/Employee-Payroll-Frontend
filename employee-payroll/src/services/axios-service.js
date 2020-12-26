@@ -14,12 +14,12 @@ class AxiosService {
     return axios.post(url, payload, tokenRequired && httpOptions);
   }
 
-  putService(url, payload = null, tokenRequired = false, httpOptions = null) {
-    return axios.put(url, payload, tokenRequired && httpOptions);
+  putService(url, data, tokenRequired = false, httpOptions = null) {
+    return axios.put(url, data, tokenRequired && httpOptions);
   }
 
   deleteService(url = "", tokenRequired = false, httpOptions = null) {
-    return axios.delete(url, tokenRequired && httpOptions);
+    return axios.delete(url);
   }
 }
 

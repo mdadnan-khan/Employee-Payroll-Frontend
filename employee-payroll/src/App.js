@@ -10,11 +10,14 @@ class App extends React.Component {
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route exact path="/form">
+            <Route exact path="/payroll-form">
               <PayrollForm />
             </Route>
             <Route exact path="/home">
               <PayrollHome />
+            </Route>
+            <Route exact path="/payroll-form/:id">
+              <PayrollForm />
             </Route>
           </Switch>
         </BrowserRouter>
